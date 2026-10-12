@@ -1,16 +1,32 @@
-# MrMussane
-robo-vagas-scraper
-O problema que resolve
-Procurar vaga em Moçambique significa visitar manualmente dezenas de sites diferentes todos os dias. Este script automatiza essa busca: em vez de abrir 15 sites um a um, corre tudo de uma vez e devolve uma lista organizada das vagas relevantes.
+# 🤖 Robô de Vagas — Web Scraper de Oportunidades de Emprego (Moçambique)
 
-Como funciona, passo a passo
+Script em Python que percorre automaticamente sites de emprego moçambicanos, filtra vagas por palavras-chave relevantes (Monitoria, Avaliação, Análise de Dados, Gestão de Dados, etc.), remove duplicados e exporta os resultados para Excel/CSV com data automática no nome do ficheiro.
 
-Lista de sites-alvo — o script tem uma lista de 15 sites de emprego moçambicanos e internacionais relevantes para Moçambique (LinkedIn Jobs, Vaga.co.mz, UN Jobs, ImpactPool, NGO Jobs in Africa, Trampomoz, entre outros).
-Pedido HTTP a cada site (requests.get) — com um timeout de 10 segundos, para não ficar bloqueado se um site não responder.
-Leitura do HTML com BeautifulSoup — a biblioteca transforma o HTML bruto da página numa estrutura que o Python consegue percorrer.
-Extracção de todos os links (soup.find_all('a')) — depois, para cada link, verifica se o texto contém alguma das palavras-chave definidas (Monitoria, Avaliação, Análise de Dados, Gestão de Dados, Analista, etc.), ignorando maiúsculas/minúsculas.
-Resolução de URLs relativas — alguns sites usam links relativos (ex.: /vaga/123); o script detecta isso e completa com o endereço do site de origem.
-Consolidação num DataFrame (pandas) — todas as vagas encontradas em todos os sites são juntas numa única tabela, com três colunas: título, link e site de origem.
-Remoção de duplicados (drop_duplicates) — evita listar a mesma vaga duas vezes.
-Exportação com data automática — gera um ficheiro vagas_AAAAMMDD.xlsx/.csv, para manter um histórico diário das vagas encontradas.
-Tratamento de erros — cada site é processado dentro de um try/except, por isso se um site estiver em baixo ou mudar de estrutura, o script não pára — só regista o erro e continua para o próximo.
+## Como funciona
+
+1. Faz pedidos HTTP a uma lista de 15 sites de emprego (LinkedIn, Vaga.co.mz, UN Jobs, ImpactPool, entre outros).
+2. Usa **BeautifulSoup** para analisar o HTML e extrair todos os links de cada página.
+3. Filtra os links cujo texto contém alguma das palavras-chave definidas.
+4. Organiza os resultados num **DataFrame do pandas**, remove duplicados e exporta para `.xlsx`/`.csv`.
+
+## Tecnologias
+
+- Python
+- `requests` — pedidos HTTP
+- `BeautifulSoup4` — parsing de HTML
+- `pandas` — organização e exportação de dados
+
+## Como executar
+
+```bash
+pip install requests beautifulsoup4 pandas openpyxl
+python robo_vagas.py
+```
+
+O script gera um ficheiro `vagas_AAAAMMDD.xlsx` com o título, link e site de origem de cada vaga encontrada.
+
+## Possíveis melhorias futuras
+
+- Adicionar mais sites à lista `SITES`
+- Paginação automática para sites com múltiplas páginas de resultados
+- Agendamento automático (ex.: execução diária via cron) com notificação por e-mail
